@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fila de turnos</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 700px;
+      margin: 40px auto;
+      padding: 0 16px;
+      background-color: #f5f0fa;
+      color: #222;
+    }
+
+    h1, h2 {
+      color: #633a8c;
+    }
+
+    section {
+      margin-bottom: 20px;
+      padding: 20px;
+      background-color: white;
+      border: 1px solid #e0d3ed;
+      border-radius: 8px;
+    }
+
+    label {
+      display: block;
+      margin-top: 12px;
+    }
+
+    input {
+      width: 100%;
+      box-sizing: border-box;
+      margin-top: 5px;
+      padding: 9px;
+      border: 1px solid #cdb9df;
+      border-radius: 4px;
+    }
+
+    input:focus {
+      outline: 2px solid #9a70bd;
+      border-color: #7b4ba3;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 10px 14px;
+      border: 0;
+      border-radius: 5px;
+      background-color: #70449a;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #573276;
+    }
+
+    li {
+      margin: 10px 0;
+    }
+
+    #mensaje {
+      min-height: 20px;
+      color: #21132f;
+    }
+  </style>
+</head>
+<body>
+  <h1>Fila de turnos</h1>
+
+  <section>
+    <h2>Agregar una persona</h2>
+    <form id="formulario">
+      <label for="nombre">Nombre:</label>
+      <input id="nombre" type="text" placeholder="Escribe el nombre" required>
+
+      <label for="motivo">Motivo:</label>
+      <input id="motivo" type="text" placeholder="Escribe el motivo" required>
+
+      <button type="submit">Agregar turno</button>
+    </form>
+  </section>
+
+  <section>
+    <h2>Personas en la fila</h2>
+    <p id="siguiente">La fila está vacía.</p>
+    <ol id="lista"></ol>
+    <button id="atender" type="button">Atender siguiente</button>
+  </section>
+
+  <p id="mensaje" role="status" aria-live="polite"></p>
+
+  <script>
+    const turnos = [];
+
+    const formulario = document.getElementById("formulario");
+    const campoNombre = document.getElementById("nombre");
+    const campoMotivo = document.getElementById("motivo");
+    const lista = document.getElementById("lista");
+    const siguiente = document.getElementById("siguiente");
+    const mensaje = document.getElementById("mensaje");
+    const botonAtender = document.getElementById("atender");
+
+    function mostrarTurnos() {
+      lista.innerHTML = "";
+
+      if (turnos.length === 0) {
+        siguiente.textContent = "La fila está vacía.";
+        return;
+      }
+
+      siguiente.textContent =
+        "Siguiente: " + turnos[0].nombre + " - " + turnos[0].motivo;
+
+      for (let i = 0; i < turnos.length; i++) {
+        const elemento = document.createElement("li");
+        elemento.textContent = turnos[i].nombre + " - " + turnos[i].motivo;
+        lista.appendChild(elemento);
+      }
+    }
+
+    formulario.addEventListener("submit", function(evento) {
+      evento.preventDefault();
+
+      const nombre = campoNombre.value.trim();
+      const motivo = campoMotivo.value.trim();
+
+      if (nombre === "" || motivo === "") {
+        mensaje.textContent = "Escribe el nombre y el motivo.";
+        return;
+      }
+
+      turnos.push({ nombre: nombre, motivo: motivo });
+      formulario.reset();
+      mostrarTurnos();
+      mensaje.textContent = "Turno agregado al final de la fila.";
+    });
+
+    botonAtender.addEventListener("click", function() {
+      if (turnos.length === 0) {
+        mensaje.textContent = "La fila está vacía. No hay personas por atender.";
+        return;
+      }
+
+      const personaAtendida = turnos.shift();
+      mostrarTurnos();
+      mensaje.textContent = "Se atendió a " + personaAtendida.nombre + ".";
+    });
+
+    mostrarTurnos();
+  </script>
+</body>
+</html>

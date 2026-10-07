@@ -1,0 +1,43 @@
+body {
+  margin: 0;
+  padding: 2rem;
+  font-family: Arial, sans-serif;
+  background-color: #f1f3f8;
+  color: #202536;
+}
+
+header,
+footer {
+  max-width: 42rem;
+  margin: 0 auto;
+}
+
+.tarjeta {
+  max-width: 38rem;
+  margin: 2rem auto;
+  padding: 2rem;
+  border: 1px solid #d9deeb;
+  border-radius: 1rem;
+  background-color: white;
+  box-shadow: 0 1rem 2rem #20253618;
+}
+
+.etiqueta {
+  color: #6046c8;
+  font-size: 0.85rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+a {
+  color: #4930ad;
+}
+
+a:hover,
+a:focus-visible {
+  color: #10215f;
+}
+.tarjeta {
+  padding: 2rem;
+  background-color: rgb(142, 145, 143);
+}
