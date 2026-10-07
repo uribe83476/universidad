@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <!-- Estos datos ayudan al navegador a mostrar la página correctamente. -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f0e7">
+  <meta name="description" content="Una colección de juegos clásicos: Snake y Triqui.">
+  <title>Club de juegos</title>
+  <!-- La apariencia y el código del juego están en archivos separados. -->
+  <link rel="stylesheet" href="css/styles.css">
+  <!-- defer espera a que el HTML esté leído antes de ejecutar estos archivos. -->
+  <script defer src="js/i18n.js"></script>
+  <script defer src="js/api.js"></script>
+  <script defer src="js/snake.js"></script>
+  <script defer src="js/triqui.js"></script>
+  <script defer src="js/app.js"></script>
+</head>
+<body>
+  <!-- page mantiene centrado todo el contenido del sitio. -->
+  <div class="page">
+    <!-- La cabecera contiene el nombre del sitio y las pestañas para cambiar de juego. -->
+    <header class="topline">
+      <a class="brand" href="index.html" data-i18n-aria-label="brandHome"><span class="brand-mark" aria-hidden="true"></span><span data-i18n="brandName">Club de juegos</span></a>
+      <div class="topline-actions">
+        <nav class="game-switch" data-i18n-aria-label="selectGame" role="tablist">
+          <button class="game-tab is-active" id="snake-tab" type="button" role="tab" aria-selected="true" aria-controls="snake-view" data-game-target="snake" data-i18n="snakeTab">Snake</button>
+          <button class="game-tab" id="triqui-tab" type="button" role="tab" aria-selected="false" aria-controls="triqui-view" data-game-target="triqui" data-i18n="triquiTab">Triqui</button>
+        </nav>
+        <button class="language-toggle" id="language-toggle" type="button" aria-label="Cambiar el idioma a inglés" title="Cambiar el idioma a inglés">EN</button>
+      </div>
+    </header>
+
+    <!-- El nombre se guarda en el navegador y se usa en el saludo y los historiales. -->
+    <form class="player-form" id="player-form">
+      <label for="player-name" data-i18n="playerName">Tu nombre</label>
+      <input id="player-name" name="player-name" type="text" maxlength="24" placeholder="Escribe tu nombre" data-i18n-placeholder="playerPlaceholder" autocomplete="nickname" required>
+      <button class="name-save" type="submit" data-i18n="saveName">Guardar nombre</button>
+      <span class="player-greeting" id="player-greeting" aria-live="polite">Elige un nombre para jugar</span>
+    </form>
+
+    <!-- Cada juego ocupa una vista; JavaScript muestra una y oculta la otra. -->
+    <main>
+      <!-- Snake: tablero, controles, puntaje y opciones de apariencia. -->
+      <section class="game-view" id="snake-view" role="tabpanel" aria-labelledby="snake-tab">
+        <div class="game-layout">
+          <section class="game-panel" data-i18n-aria-label="snakeGame">
+            <div class="game-heading"><div><p class="eyebrow" data-i18n="arcadeOne">Arcade · 01</p><h1>Snake</h1></div><span class="game-tag" data-i18n="snakeSlogan">¡A por el récord!</span></div>
+            <div class="scorebar" aria-live="polite">
+              <div class="score"><span data-i18n="points">PUNTOS</span><strong id="snake-score">0</strong></div>
+              <div class="score"><span data-i18n="best">RÉCORD</span><strong id="snake-best">0</strong></div>
+            </div>
+            <div class="board-wrap">
+              <canvas id="snake-board" width="420" height="420" data-i18n-aria-label="snakeBoard"></canvas>
+              <div class="overlay" id="snake-overlay">
+                <strong id="snake-overlay-title" data-i18n="snakeReady">¿Listo para jugar?</strong>
+                <span id="snake-overlay-message" data-i18n="snakeReadyMessage">Recoge las manzanas y evita chocar contigo mismo o con el borde.</span>
+                <button class="primary" id="snake-start" data-i18n="snakeStart">Empezar partida</button>
+              </div>
+            </div>
+            <div class="below-board">
+              <span class="hint"><span data-i18n="moveWith">Mueve con</span> <b>← ↑ → ↓</b> <span data-i18n="or">o</span> <b>W A S D</b></span>
+              <div class="actions">
+                <button class="icon-button" id="snake-pause" type="button" data-i18n-title="pause" data-i18n-aria-label="pause">Ⅱ</button>
+                <button class="icon-button" id="snake-restart" type="button" data-i18n-title="restart" data-i18n-aria-label="restart">↻</button>
+              </div>
+            </div>
+            <div class="touch-controls" data-i18n-aria-label="directionControls">
+              <button class="direction-button" data-dir="up" data-i18n-aria-label="up">↑</button>
+              <button class="direction-button" data-dir="left" data-i18n-aria-label="left">←</button>
+              <button class="direction-button" data-dir="down" data-i18n-aria-label="down">↓</button>
+              <button class="direction-button" data-dir="right" data-i18n-aria-label="right">→</button>
+            </div>
+          </section>
+          <aside class="side-panel">
+            <p class="section-label" data-i18n="customize">Personaliza</p><h2 data-i18n="chooseShape">Elige tu figura</h2>
+            <p class="side-copy" data-i18n="shapeDescription">Dale un estilo a tu serpiente. Puedes cambiarlo cuando quieras.</p>
+            <div class="shape-list" role="group" data-i18n-aria-label="chooseShape">
+              <button class="shape-option" type="button" data-shape="circle" aria-pressed="true"><span class="shape-icon" aria-hidden="true">●</span><span><span class="shape-name" data-i18n="roundShape">Redonda</span><br><span class="shape-note" data-i18n="roundDescription">Suave y clásica</span></span><span class="selected-mark">✓</span></button>
+              <button class="shape-option" type="button" data-shape="square" aria-pressed="false"><span class="shape-icon" aria-hidden="true">■</span><span><span class="shape-name" data-i18n="squareShape">Cuadrada</span><br><span class="shape-note" data-i18n="squareDescription">Firme y ordenada</span></span><span class="selected-mark"></span></button>
+              <button class="shape-option" type="button" data-shape="triangle" aria-pressed="false"><span class="shape-icon" aria-hidden="true">▲</span><span><span class="shape-name" data-i18n="triangleShape">Triangular</span><br><span class="shape-note" data-i18n="triangleDescription">Punta de velocidad</span></span><span class="selected-mark"></span></button>
+            </div>
+            <div class="divider"></div><p class="section-label" data-i18n="howToPlay">Cómo jugar</p>
+            <div class="tip"><b aria-hidden="true">★</b><span><span data-i18n="snakeTipStart">Cada manzana suma</span> <strong data-i18n="tenPoints">10 puntos</strong> <span data-i18n="snakeTipEnd">y alarga tu serpiente. ¡No te muerdas la cola!</span></span></div>
+            <div class="divider history-divider"></div>
+            <p class="section-label" data-i18n="recentHistory">Historial reciente</p>
+            <ol class="history-list" id="snake-history" aria-live="polite"><li class="history-empty" data-i18n="emptyHistory">Aún no hay partidas.</li></ol>
+          </aside>
+        </div>
+      </section>
+
+      <!-- Triqui: tablero de nueve casillas, marcador e historial. -->
+      <section class="game-view" id="triqui-view" role="tabpanel" aria-labelledby="triqui-tab" hidden>
+        <div class="game-layout triqui-layout">
+          <section class="game-panel triqui-panel" data-i18n-aria-label="triquiGame">
+            <div class="game-heading"><div><p class="eyebrow" data-i18n="twoPlayers">Dos jugadores · 02</p><h1 data-i18n="triquiTab">Triqui</h1></div><span class="game-tag" data-i18n="threeInARow">Tres en línea</span></div>
+            <div class="triqui-status" id="triqui-status" aria-live="polite">Turno de X · Elige una casilla</div>
+            <div class="triqui-board" role="group" data-i18n-aria-label="triquiBoard">
+              <button class="tic-cell" type="button" data-cell="0" aria-label="Casilla 1: vacía"></button>
+              <button class="tic-cell" type="button" data-cell="1" aria-label="Casilla 2: vacía"></button>
+              <button class="tic-cell" type="button" data-cell="2" aria-label="Casilla 3: vacía"></button>
+              <button class="tic-cell" type="button" data-cell="3" aria-label="Casilla 4: vacía"></button>
+              <button class="tic-cell" type="button" data-cell="4" aria-label="Casilla 5: vacía"></button>
+              <button class="tic-cell" type="button" data-cell="5" aria-label="Casilla 6: vacía"></button>
+              <button class="tic-cell" type="button" data-cell="6" aria-label="Casilla 7: vacía"></button>
+              <button class="tic-cell" type="button" data-cell="7" aria-label="Casilla 8: vacía"></button>
+              <button class="tic-cell" type="button" data-cell="8" aria-label="Casilla 9: vacía"></button>
+            </div>
+            <div class="below-board triqui-actions"><span class="hint" data-i18n="xStarts">X empieza · juega por turnos</span><button class="primary" id="triqui-new-round" type="button" data-i18n="newRound">Nueva partida</button></div>
+          </section>
+          <aside class="side-panel">
+            <p class="section-label" data-i18n="scoreboard">Marcador</p><h2 data-i18n="gamesWon">Partidas ganadas</h2>
+            <p class="side-copy" data-i18n="scoresSaved">El marcador se guarda en el servidor local.</p>
+            <div class="triqui-scores" aria-live="polite">
+              <div class="player-score player-x"><span>X</span><strong id="triqui-score-x">0</strong></div>
+              <div class="player-score player-draw"><span data-i18n="draws">Empates</span><strong id="triqui-score-draw">0</strong></div>
+              <div class="player-score player-o"><span>O</span><strong id="triqui-score-o">0</strong></div>
+            </div>
+            <div class="divider"></div><p class="section-label" data-i18n="objective">Objetivo</p>
+            <div class="tip"><b aria-hidden="true">★</b><span data-i18n="triquiTip">Alinea tres símbolos en horizontal, vertical o diagonal antes que tu rival.</span></div>
+            <div class="divider history-divider"></div>
+            <p class="section-label" data-i18n="recentHistory">Historial reciente</p>
+            <ol class="history-list" id="triqui-history" aria-live="polite"><li class="history-empty" data-i18n="emptyHistory">Aún no hay partidas.</li></ol>
+            <button class="text-button" id="triqui-reset-score" type="button" data-i18n="clearScore">Borrar marcador</button>
+          </aside>
+        </div>
+      </section>
+    </main>
+    <!-- Pie de página sencillo para cerrar el contenido principal. -->
+    <footer class="footer" data-i18n="footer">Hecho para jugar · Snake y Triqui</footer>
+  </div>
+</body>
+</html>

@@ -1,0 +1,20 @@
+﻿{
+    "snake":  {
+                  "history":  [
+                                  {
+                                      "score":  0,
+                                      "player":  "Invitado",
+                                      "playedAt":  "2026-10-04T16:46:37.2738735Z"
+                                  }
+                              ],
+                  "best":  60
+              },
+    "triqui":  {
+                   "O":  0,
+                   "history":  [
+
+                               ],
+                   "draw":  0,
+                   "X":  0
+               }
+}
